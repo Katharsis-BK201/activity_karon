@@ -4,32 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- SweetAlert2 for Alerts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 <body>
-    <h1>Edit Student</h1>
-        <form>
-            @csrf
-            @method('PUT')
-            <label>First Name:</label>
-            <input type="text" name="first_name" value="{{ $student->first_name }}" >
-            <label>Last Name:</label>
-            <input type="text" name="last_name" value="{{ $student->last_name }}" >
-            <label>Address:</label>
-            <input type="text" name="address" value="{{ $student->address }}">
-            <button type="submit" id = "UpdateStudents">Update Student</button>
-        </form>
-    <a href="{{ route('students.index') }}">Back</a>
+    <h1>Add Students</h1>
+    <form>
+        @csrf
+        <label>First Name:</label>
+        <input type="text" name="first_name" >
+        <label>Last Name:</label>
+        <input type="text" name="last_name" >
+        <label>Address:</label>
+        <input type="text" name="address">
+        <button type="submit" id = "AddStudents">Add Student</button>
+    </form>
 </body>
 <script>
     $(document).ready(function() {
-        $('#UpdateStudents').click(function(e) {
+        $('#AddStudents').click(function(e) {
             e.preventDefault();
             
             // Collect form data
@@ -68,13 +65,12 @@
             // AJAX Request
             $.ajax({
                 type: "POST",
-                url: "{{ route('students.update', Crypt::encrypt($student->id)) }}",
+                url: "{{ route('students.store') }}",
                 data: {
                     first_name: first_name,
                     last_name: last_name,
                     address: address,
                     _token: token,
-                    _method: 'PUT',
                 },
                 success: function(response) {
                     Swal.fire({
@@ -98,4 +94,6 @@
         });
     });
 </script>
+
+
 </html>
